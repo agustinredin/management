@@ -47,7 +47,9 @@ namespace gym.site.Controllers
         {
             try
             {
-                string from = "gestionaloargentina@gmail.com";
+                /*if(ctxgym.Account.Where(x => x.User == email).Count() > 0) consultas desactivadas
+                {*/
+                string from = ConfigurationManager.AppSettings["managementEmail"];
 
                 var pass = ConfigurationManager.AppSettings["mailPass"];
 
@@ -58,17 +60,34 @@ namespace gym.site.Controllers
                 mymessage.From = fromaddress;
 
                 mymessage.To.Add(email);
-                mymessage.Subject = "Gestionalo - Recuperar contraseña";
+                mymessage.Subject = "Gestionalo - Recuperación de Contraseña";
                 mymessage.SubjectEncoding = Encoding.UTF8;
+
 
                 #region mailbody
                 var body = new StringBuilder();
-                body.AppendLine("<html><body><h4></h4>");
+                string url = String.Format("http://gestionalo.ar{0}?email={1}", Url.Action("PasswordRecoveryConfirmation", "Account"), email);
+                body.AppendLine("<html>");
+                body.AppendLine("<head>");
+                body.AppendLine(@"<meta http-equiv=""Content-Type"" content=""text/html; charset=utf-8"" />");
+                body.AppendLine(@"<meta charset=""utf-8"" />");
+                body.AppendLine("</head>");
+                body.AppendLine(@"<body class=""login-page"" stlye=""min-height: 466px;"">");
+                body.AppendLine(@"<div class=""text-center"">");
+                body.AppendLine(@"<div class=""login-box""");
+                body.AppendLine(@"<h4 style=""font-family:Courier New""> Para restablecer su contraseña, haga click <a href=" + url + ">acá</a>.</h4>");
+                body.AppendLine(@"<br /> <p style=""opacity:0.5;font-family:Courier New""> Gesionalo S.A ©</p>");
+                body.AppendLine(@"</div>");
+                body.AppendLine(@"</div>");
+                body.AppendLine(@"</body>");
+                body.AppendLine(@"</html>");
                 #endregion
 
-                //mymessage.Body = body;
+
+                mymessage.Body = body.ToString();
                 mymessage.IsBodyHtml = true;
                 mymessage.BodyEncoding = Encoding.UTF8;
+
                 //Create Smtp Client
                 var mailer = new MimeMailer("smtp.gmail.com", 465);
                 mailer.User = from;
@@ -78,13 +97,20 @@ namespace gym.site.Controllers
 
                 //Set a delegate function for call back                
                 mailer.SendMail(mymessage);
+                //}
 
                 return Json(true, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
+                ViewBag.Ex = ex;
                 return Json(false, JsonRequestBehavior.AllowGet);
             }
+        }
+
+        public ActionResult PasswordRecoveryConfirmation(string email)
+        {
+            return RedirectToAction("Login");
         }
     }
 }
