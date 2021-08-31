@@ -72,13 +72,12 @@ namespace gym.site.Controllers
                 body.AppendLine(@"<meta http-equiv=""Content-Type"" content=""text/html; charset=utf-8"" />");
                 body.AppendLine(@"<meta charset=""utf-8"" />");
                 body.AppendLine("</head>");
-                body.AppendLine(@"<body class=""login-page"" stlye=""min-height: 466px;"">");
-                body.AppendLine(@"<div class=""text-center"">");
-                body.AppendLine(@"<div class=""login-box""");
-                body.AppendLine(@"<h4 style=""font-family:Courier New""> Para restablecer su contraseña, haga click <a href=" + url + ">acá</a>.</h4>");
-                body.AppendLine(@"<br /> <p style=""opacity:0.5;font-family:Courier New""> Gesionalo S.A ©</p>");
-                body.AppendLine(@"</div>");
-                body.AppendLine(@"</div>");
+                body.AppendLine(@"<body>");
+                body.AppendLine(@"<div style=""background: #e9ecef;font-size: 16,5px; padding: 15px;margin:5% 20% 5% 20%;"">");
+                body.AppendLine(@"<p style=""background: #e9ecef; text-align: center; padding: 15px; font-family: 'Roboto', sans-serif; opacity: 0.7;color:black;"">Haga click en el botón para restablecer su contraseña.</p>");
+                body.AppendLine(@"<div style=""text-align:center;"">");
+                body.AppendLine(@"<button style=""background: #007bff; border-radius: 5px;""><a style=""color: white;text-decoration: none;"" href=" + url + ">Solicitar nueva contraseña</a></button>");
+                body.AppendLine("</div></div>");
                 body.AppendLine(@"</body>");
                 body.AppendLine(@"</html>");
                 #endregion
@@ -110,7 +109,25 @@ namespace gym.site.Controllers
 
         public ActionResult PasswordRecoveryConfirmation(string email)
         {
-            return RedirectToAction("Login");
+            ViewBag.email = email;
+            return View();
+        }
+
+        public JsonResult PasswordRecoveryConfirmationVerif(string email, string password)
+        {
+            //La verificación de contraseñas que coincidan está hecha en JS
+            try
+            {
+                /*var acc = ctxgym.Account.Where(x => x.User == email).First();
+                //Set new password on DB
+                acc.Password = password;
+                ctxgym.SaveChanges();*/
+                return Json(true, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(ex.ToString(), JsonRequestBehavior.AllowGet);
+            }
         }
     }
 }
