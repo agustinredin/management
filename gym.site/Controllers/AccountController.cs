@@ -9,12 +9,13 @@ using gym.site.Filters;
 using AegisImplicitMail;
 using System.Configuration;
 using System.Text;
+using BotDetect.Web.Mvc;
 
 namespace gym.site.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly IntegratekGYMEntities ctxgym = new IntegratekGYMEntities();
+        private readonly GYMEntities ctxgym = new GYMEntities();
         // GET: Account
         public ActionResult Login()
         {
@@ -47,8 +48,8 @@ namespace gym.site.Controllers
         {
             try
             {
-                /*if(ctxgym.Account.Where(x => x.User == email).Count() > 0) consultas desactivadas
-                {*/
+                if(ctxgym.Account.Where(x => x.User == email).Count() > 0)
+                {
                 string from = ConfigurationManager.AppSettings["managementEmail"];
 
                 var pass = ConfigurationManager.AppSettings["mailPass"];
@@ -96,7 +97,7 @@ namespace gym.site.Controllers
 
                 //Set a delegate function for call back                
                 mailer.SendMail(mymessage);
-                //}
+                }
 
                 return Json(true, JsonRequestBehavior.AllowGet);
             }
@@ -118,15 +119,15 @@ namespace gym.site.Controllers
             //La verificación de contraseñas que coincidan está hecha en JS
             try
             {
-                /*var acc = ctxgym.Account.Where(x => x.User == email).First();
+                var acc = ctxgym.Account.Where(x => x.User == email).First();
                 //Set new password on DB
                 acc.Password = password;
-                ctxgym.SaveChanges();*/
+                ctxgym.SaveChanges();
                 return Json(true, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
-                return Json(ex.ToString(), JsonRequestBehavior.AllowGet);
+                return Json(false, JsonRequestBehavior.AllowGet);
             }
         }
     }

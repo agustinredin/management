@@ -13,10 +13,10 @@ namespace gym.model
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class IntegratekGYMEntities : DbContext
+    public partial class GYMEntities : DbContext
     {
-        public IntegratekGYMEntities()
-            : base("name=IntegratekGYMEntities")
+        public GYMEntities()
+            : base("name=GYMEntities")
         {
         }
     

@@ -25,5 +25,6 @@ namespace gym.model
         public string InnerMessage { get; set; }
         public string InnerStackTrace { get; set; }
         public string InnerSource { get; set; }
+        public System.Guid id { get; set; }
     }
 }
