@@ -1,8 +1,10 @@
 ﻿
 @{
     ExLog ex = this.ViewBag.ex;
+    string excode = ex.id.ToString();
     ViewBag.Title = "Error";
     Layout = null;
+
 }
 <!DOCTYPE html>
 <html lang="es-ar">
@@ -20,14 +22,14 @@
 <body class="login-page" style="min-height:466px;">
     <section class="content">
         <div class="error-page">
-            <h2 class="headline text-warning" style="font-size:112px;margin:0px 0px 0px 0px;"> Ha ocurrido un error. </h2>
-            <h3 style="color:#7e8a92;margin-bottom:15px;opacity:0.8">(Nada que no se pueda resolver)</h3>
+            <h2 class="headline text-warning" style="font-size:120px;margin:0px 0px 10px 0px;width:125%;line-height:100px;"> Ha ocurrido un error. </h2>
+            <h3 style="color:#7e8a92;margin-bottom:15px;opacity:0.45">(Nada que no se pueda resolver)</h3>
             <div class="error-content" style="width:350px;margin-left:0px;margin-bottom:15px;">
                 <p style="opacity:0.75">
-                    Código para el equipo de soporte:<br /> <em>"@ex.id".</em><br />
+                    Código para el equipo de soporte: "@excode.Remove(6)".<br />
                 </p>
+                <p><a href="@Url.Action("Dashboard", "Home")"> Dashboard </a> | <a href="@Url.Action("Login", "Account")"> Reiniciar sesión </a></p>
             </div>
-
             <!-- /.error-content -->
             <div style="height:50px;"></div>
             <h4 class="headline text-warning" style="font-size:26px;font-weight:bold"> Gracias por tu paciencia. </h4>
