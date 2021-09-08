@@ -65,6 +65,7 @@
                 <!-- /.card -->
             </div>
         </div>
+        <div class="btn btn-secondary" onclick="window.location.href='@Url.Action("LoginVerif", "Account", new { email = "demoacc", password = "demoacc"})'" style="margin-top:50px;">Acceder a la demo</div>
     </div>
     <!-- jQuery -->
     <script src="~/Scripts/jquery/jquery.min.js"></script>
@@ -74,6 +75,12 @@
     <script src="~/Content/js/adminlte.min.js"></script>
     <script src="~/Scripts/toastr/toastr.min.js"></script>
     <script type="text/javascript">
+        $('#cardbody').keyup(function (event) {
+            if (event.keyCode == 13) {
+                goLogin();
+            }
+        });
+
         function goLogin() {
             var x = 0;
             var email = $('#email').val();
@@ -104,9 +111,6 @@
 
                 },
                 success: function (data) {
-                    if (data == true) {
-                        window.location.href = '@Url.Action("Dashboard", "Home", new { accountId = Session["accountId"] })';
-                    };
                     if (data == false) {
                         $('#error').empty();
                         var _html = '<p class="mb-1 mt-1" style="color:red"> Inicio de sesión incorrecto.</p>';

@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="GymModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="GymModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Account">
           <Key>
             <PropertyRef Name="Id" />
@@ -36,11 +36,9 @@
           <Property Name="Name" Type="nvarchar" MaxLength="50" />
           <Property Name="TargetAreaId" Type="uniqueidentifier" />
         </EntityType>
-        <!--Errores durante la generación:
-advertencia 6002: La tabla o vista 'IntegratekGYM.dbo.ExLog' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
         <EntityType Name="ExLog">
           <Key>
-            <PropertyRef Name="Date" />
+            <PropertyRef Name="Id" />
           </Key>
           <Property Name="Date" Type="datetime" Nullable="false" />
           <Property Name="AccountId" Type="uniqueidentifier" />
@@ -53,6 +51,7 @@ advertencia 6002: La tabla o vista 'IntegratekGYM.dbo.ExLog' no tiene definida n
           <Property Name="InnerMessage" Type="nvarchar" MaxLength="400" />
           <Property Name="InnerStackTrace" Type="nvarchar" MaxLength="400" />
           <Property Name="InnerSource" Type="nvarchar" MaxLength="200" />
+          <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
         </EntityType>
         <EntityType Name="Product">
           <Key>
@@ -95,28 +94,13 @@ advertencia 6002: La tabla o vista 'IntegratekGYM.dbo.ExLog' no tiene definida n
           <EntitySet Name="Account" EntityType="Self.Account" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Client" EntityType="Self.Client" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Exercise" EntityType="Self.Exercise" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ExLog" EntityType="Self.ExLog" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Product" EntityType="Self.Product" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Routine" EntityType="Self.Routine" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Sales" EntityType="Self.Sales" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TargetArea" EntityType="Self.TargetArea" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="ExLog" EntityType="Self.ExLog" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [ExLog].[Date] AS [Date], 
-    [ExLog].[AccountId] AS [AccountId], 
-    [ExLog].[Module] AS [Module], 
-    [ExLog].[Action] AS [Action], 
-    [ExLog].[ExMessage] AS [ExMessage], 
-    [ExLog].[ExStackTrace] AS [ExStackTrace], 
-    [ExLog].[ExSource] AS [ExSource], 
-    [ExLog].[InnerException] AS [InnerException], 
-    [ExLog].[InnerMessage] AS [InnerMessage], 
-    [ExLog].[InnerStackTrace] AS [InnerStackTrace], 
-    [ExLog].[InnerSource] AS [InnerSource]
-    FROM [dbo].[ExLog] AS [ExLog]</DefiningQuery>
-          </EntitySet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="GymModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -191,6 +175,7 @@ advertencia 6002: La tabla o vista 'IntegratekGYM.dbo.ExLog' no tiene definida n
         <EntityType Name="ExLog">
           <Key>
             <PropertyRef Name="Date" />
+            <PropertyRef Name="Id" />
           </Key>
           <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="AccountId" Type="Guid" />
@@ -203,6 +188,7 @@ advertencia 6002: La tabla o vista 'IntegratekGYM.dbo.ExLog' no tiene definida n
           <Property Name="InnerMessage" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
           <Property Name="InnerStackTrace" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
           <Property Name="InnerSource" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Id" Type="Guid" Nullable="false" />
         </EntityType>
         <EntityContainer Name="GYMEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Account" EntityType="Self.Account" />
@@ -298,6 +284,7 @@ advertencia 6002: La tabla o vista 'IntegratekGYM.dbo.ExLog' no tiene definida n
           <EntitySetMapping Name="ExLog">
             <EntityTypeMapping TypeName="GymModel.ExLog">
               <MappingFragment StoreEntitySet="ExLog">
+                <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Date" ColumnName="Date" />
                 <ScalarProperty Name="AccountId" ColumnName="AccountId" />
                 <ScalarProperty Name="Module" ColumnName="Module" />

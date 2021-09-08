@@ -14,41 +14,39 @@ namespace gym.site.Filters
             ExLog log = new ExLog();
 
             string accountId = string.Empty;
-            try{
+            try
+            {
                 accountId = filterContext.HttpContext.Session["accountId"] != null
                 ? filterContext.HttpContext.Session["accountId"].ToString() : "";
             }
-            catch{}
+            catch { }
 
-            try{
-                using(GYMEntities db = new GYMEntities())
+            using (GYMEntities db = new GYMEntities())
+            {
+                //Seteamos atributos de ENTIDAD
+                log.Date = DateTime.UtcNow;
+                log.AccountId = accountId == "" ? null : (Guid?)Guid.Parse(accountId);
+                log.Module = filterContext.RouteData.Values["controller"].ToString();
+                log.Action = filterContext.RouteData.Values["action"].ToString();
+                log.ExMessage = ex.Message;
+                log.ExStackTrace = ex.StackTrace.Remove(400);
+                log.ExSource = ex.Source;
+                if (ex.InnerException != null)
                 {
-                    //Seteamos atributos de ENTIDAD
-                    log.Date = DateTime.UtcNow;
-                    log.AccountId = accountId == "" ? null : (Guid?)Guid.Parse(accountId);
-                    log.Module = filterContext.RouteData.Values["controller"].ToString();
-                    log.Action = filterContext.RouteData.Values["action"].ToString();
-                    log.ExMessage = ex.Message;
-                    log.ExStackTrace = ex.StackTrace;
-                    log.ExSource = ex.Source;
-                    if(ex.InnerException != null)
-                    {
-                        log.InnerException = true;
-                        log.InnerMessage = ex.InnerException.Message;
-                        log.InnerStackTrace = ex.InnerException.StackTrace;
-                        log.InnerSource = ex.InnerException.Source;
-                    }
-                    log.id = Guid.NewGuid();
-
-                    db.ExLog.Add(log);
-                    db.SaveChanges();
+                    log.InnerException = true;
+                    log.InnerMessage = ex.InnerException.Message;
+                    log.InnerStackTrace = ex.InnerException.StackTrace;
+                    log.InnerSource = ex.InnerException.Source;
                 }
+                log.Id = Guid.NewGuid();
 
-                filterContext.ExceptionHandled = true; 
-                filterContext.Result = new RedirectToRouteResult(new RouteValueDictionary { { "controller", "Home" }, { "action", "Error" }, { "queryname", "ex" }, { "queryvalues", log } });
-                filterContext.Result.ExecuteResult(filterContext);
+                db.ExLog.Add(log);
+                db.SaveChanges();
             }
-            catch{}
+
+            filterContext.ExceptionHandled = true;
+            filterContext.Result = new RedirectToRouteResult(new RouteValueDictionary { { "controller", "Home" }, { "action", "Error" }, { "queryname", "ex" }, { "queryvalues", log } });
+            filterContext.Result.ExecuteResult(filterContext);
         }
     }
 }

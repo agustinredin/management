@@ -22,21 +22,17 @@ namespace gym.site.Controllers
             return View();
         }
 
-        public JsonResult LoginVerif(string email, string password)
+        public ActionResult LoginVerif(string email, string password)
         {
             if (ctxgym.Account.Where(p => p.User == email && p.Password == password).Count() == 1)
             {
-                return Json(true, JsonRequestBehavior.AllowGet);
+                Session["accountId"] = ctxgym.Account.Where(p => p.User == email && p.Password == password).First().Id;
+                return RedirectToAction("Dashboard", "Home", new { accountId = Session["accountId"]});
             }
             else
             {
                 return Json(false, JsonRequestBehavior.AllowGet);
             }
-        }
-
-        public ActionResult Register()
-        {
-            return View();
         }
 
         public ActionResult PasswordRecovery()

@@ -13,10 +13,10 @@ namespace gym.site.Controllers
 
         // GET: Home/Dashboard
         //La idea del dashboard es crear un panel de control completo con vínculos a las acciones más importantes del Framework.
-        /*public ActionResult Dashboard()
+        public ActionResult Dashboard(Guid accountId)
         {
             return View();
-        }*/
+        }
 
         public ActionResult Error(ExLog ex)
         {
